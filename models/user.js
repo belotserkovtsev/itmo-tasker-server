@@ -16,9 +16,14 @@ class User {
                     }
 
                     if(!rows.length)
-                        return resolve(false)
+                        return reject(new Exception(4, "User doesn\'t exist", username))
 
-                    return resolve(true);
+                    return resolve({
+                        username: rows[0].username,
+                        id: rows[0].id,
+                        firstname: rows[0].firstname,
+                        lastname: rows[0].lastname
+                    });
 
                 })
             })

@@ -9,8 +9,7 @@ app.post('/api/checkUser', ((req, res) => {
         db.checkUser(req.query.username)
             .then(ans => {
                 res.json({
-                    error: false,
-                    exists: ans
+                    user: ans
                 })
             })
             .catch(e => {
@@ -52,7 +51,6 @@ app.post('/api/getUserTasks', (req, res) => {
         db.getUserTasks(req.query.userId)
             .then(ans => {
                 res.json({
-                    error: false,
                     tasks: ans
                 })
             })
@@ -65,10 +63,16 @@ app.post('/api/getUserTasks', (req, res) => {
 
 app.post('/api/getGroupTasks', (req, res) => {
     if (req.query.groupId && parseInt(req.query.groupId)) {
-        db.getGroupTasks(req.query.groupId)
+        db.getGroupTasks(req.query.groupId, null)
             .then(ans => {
                 res.json({
-                    error: false,
+                    tasks: ans
+                })
+            })
+    } else if(req.query.userId && parseInt(req.query.userId)) {
+        db.getGroupTasks(null, req.query.userId)
+            .then(ans => {
+                res.json({
                     tasks: ans
                 })
             })

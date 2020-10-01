@@ -29,8 +29,9 @@ class Db {
         return await Task.getUserTasks(userId)
     }
 
-    static async getGroupTasks(groupId) {
-        return await Task.getGroupTasks(groupId)
+    static async getGroupTasks(groupId, userId) {
+        return groupId ? await Task.getGroupTasks(groupId, null) :
+            await Task.getGroupTasks(null, userId)
     }
 }
 

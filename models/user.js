@@ -1,14 +1,15 @@
 const Exception = require('../exceptions/exception')
 
 class User {
-    static check(username) {
+    static check(username, id) {
         return new Promise((resolve, reject) => {
             pool.getConnection((err, connection) => {
                 if(err){
                     connection && pool._freeConnections.indexOf(connection) === -1 && connection.release()
                     return reject(new Exception(1, err.message))
                 }
-                connection.query(`select * from users where username = ?`, [username], (err, rows) => {
+                let query = id ? 'select * from users where id = ?' : 'select * from users where username = ?'
+                connection.query(query, [id ? id : username], (err, rows) => {
                     pool._freeConnections.indexOf(connection) === -1 && connection.release()
 
                     if(err){
@@ -21,6 +22,7 @@ class User {
                     return resolve({
                         username: rows[0].username,
                         id: rows[0].id,
+                        type: rows[0].type,
                         firstname: rows[0].firstname,
                         lastname: rows[0].lastname
                     });
